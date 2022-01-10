@@ -2,6 +2,8 @@ package com.company;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -42,5 +44,33 @@ public class FileRepository {
             e.printStackTrace();
         }
         return kundeList;
+    }
+
+    public void writeSortierteKunden(List<Kunde> kundeList){
+        try {
+            FileWriter writer = new FileWriter("kundensortiert.txt");
+            for (Kunde kunde: kundeList){
+                writer.write(kunde.getId()+","+kunde.getUnternehmensname()+','+kunde.getUnternehmensgrosse()+','+kunde.getAnzahlMitarbeiter()+','+kunde.getKundeEinkommen()+','+kunde.getOrt());
+                writer.write('\n');
+            }
+            writer.close();
+        } catch (IOException e){
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public void writeTopDerOrte(List<OrtEinkommen> orte){
+        try {
+            FileWriter writer = new FileWriter("statistik.txt");
+            for (OrtEinkommen ort: orte){
+                writer.write(ort.getOrt()+" "+ort.getEinkommen());
+                writer.write('\n');
+            }
+            writer.close();
+        } catch (IOException e){
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 }

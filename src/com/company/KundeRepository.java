@@ -1,5 +1,6 @@
 package com.company;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,9 +50,35 @@ public class KundeRepository {
                 return -1;
             }
         });
-        for (Kunde kunde: newKundeList){
-            System.out.println(kunde.getId()+" "+kunde.getUnternehmensname()+" "+kunde.getUnternehmensgrosse()+" "+kunde.getAnzahlMitarbeiter()+" "+kunde.getKundeEinkommen()+" "+kunde.getOrt());
+        FileRepository fileRepository=new FileRepository();
+        fileRepository.writeSortierteKunden(newKundeList);
+    }
+
+    public void topDerOrteStatistik(){
+        List<OrtEinkommen> ortList=new ArrayList<>();
+        boolean ortFound;
+        for (Kunde kunde: kundeList){
+            ortFound=false;
+            for (int i=0;i<ortList.size();i++){
+                if (ortList.get(i).getOrt().equals(kunde.getOrt())){
+                    ortFound=true;
+                    ortList.get(i).increaseEinkommen(kunde.getKundeEinkommen());
+                }
+            }
+            if (!ortFound){
+                ortList.add(new OrtEinkommen(kunde.getOrt(), kunde.getKundeEinkommen()));
+            }
         }
+        Collections.sort(ortList, new Comparator<OrtEinkommen>() {
+            @Override
+            public int compare(OrtEinkommen o1, OrtEinkommen o2) {
+                if (o1.getEinkommen()<o2.getEinkommen()) return 1;
+                else if (o1.getEinkommen()==o2.getEinkommen()) return 0;
+                return -1;
+            }
+        });
+        FileRepository fileRepository=new FileRepository();
+        fileRepository.writeTopDerOrte(ortList);
     }
 
 

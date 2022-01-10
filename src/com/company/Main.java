@@ -7,5 +7,6 @@ public class Main {
     kundeRepository.getFileData();
     kundeRepository.printKunden();
     kundeRepository.sortKunden();
+    kundeRepository.topDerOrteStatistik();
     }
 }
